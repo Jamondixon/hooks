@@ -1,20 +1,33 @@
 import React,  { useState, useEffect }from 'react';
+
 import ReactDOM from 'react-dom';
 import './index.css';
 
 
 function App() {
-  const [name, setName] = useState("Jan")
-  
+  const [data, setData] = useState([])
+
   useEffect(() => {
-    document.title = `Celebrate ${name}`
-  })
+    fetch("https://api.github.com/users")
+    .then(response => response.json())
+    .then(setData)
+  }, [])
+
+  if(data) {
+    return (
+      <div>
+        <ul>
+          {data.map((user) => (
+            <li key={user.id}>{user.login}</li>
+          ))}
+        </ul>
+        <button onClick={() => setData()}>Remove Data</button>
+      </div>
+    )
+  }
   
   return (
-    <section>
-      <p>Congratulations {name}!</p>
-      <button onClick={() => setName("Will")}>Change Winner</button>
-    </section>
+    <p>No Users</p>
   )
 }
 
